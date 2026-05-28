@@ -1,0 +1,13 @@
+{
+  "name": "tdd-pbt",
+  "version": "0.1.0",
+  "description": "TDD and Property-Based Testing workflow skills and agents for Claude Code. Enforces Red-Green-Refactor discipline with human-in-the-loop checkpoints and jqwik-based PBT support.",
+  "author": {
+    "name": "gtrefs",
+    "email": "gtrefs@liveperson.com"
+  },
+  "keywords": ["tdd", "pbt", "property-based-testing", "red-green-refactor", "jqwik", "junit", "java", "workshop"],
+  "agents": "./agents/",
+  "skills": "./skills/",
+  "rules": "./rules/"
+}
