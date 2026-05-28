@@ -2,7 +2,7 @@
 
 **Name:** tdd-pbt
 **Version:** 0.1.0
-**Author:** gtrefs (gtrefs@liveperson.com)
+**Author:** Gregor Trefs (Gregor.Trefs@gmail.com)
 
 ## Description
 
