@@ -6,8 +6,5 @@
     "name": "gtrefs",
     "email": "gtrefs@liveperson.com"
   },
-  "keywords": ["tdd", "pbt", "property-based-testing", "red-green-refactor", "jqwik", "junit", "java", "workshop"],
-  "agents": "./agents/",
-  "skills": "./skills/",
-  "rules": "./rules/"
+  "keywords": ["tdd", "pbt", "property-based-testing", "red-green-refactor", "jqwik", "junit", "java", "workshop"]
 }
