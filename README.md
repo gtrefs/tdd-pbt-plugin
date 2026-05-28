@@ -1,31 +1,31 @@
 # tdd-pbt — Claude Code Plugin
 
-A reusable Claude Code plugin packaging TDD and Property-Based Testing workflow agents, rules, and skills. Designed for workshop facilitators running the "TDD and PBT" kata sessions.
+A reusable Claude Code plugin packaging TDD and Property-Based Testing workflow agents, rules, and skills.
 
 ## What is included
 
 - **Agents**: Specialized sub-agents for each phase of the TDD and PBT cycles (red, green, refactor, test-list, property-list, find-properties, implement-properties, property-red, property-green)
 - **Rules**: Enforcement rules for Red-Green-Refactor discipline, jqwik PBT conventions, human-in-the-loop checkpoints, and Java/JUnit 6 setup
-- **Skills**: Reusable skill definitions (populated in tasks 02 and 03)
+- **Skills**: `/test-list`, `/red`, `/green`, `/refactor`, `/find-properties`, `/implement-properties`, `/property-list`, `/property-red`, `/property-green`, `/tutorial`
 
 ## Installing the plugin (local / offline)
 
-Claude Code supports installing plugins directly from a local directory. This is the recommended approach for workshop facilitators who need offline installs.
+The project root contains a `.claude-plugin/marketplace.json` that registers it as a local marketplace named `tdd-pbt-marketplace`.
 
-### Step 1 — Register the plugin directory as a local marketplace
+### Step 1 — Register the local marketplace
 
-Run this once per facilitator machine, pointing at the directory that *contains* the plugin folder (i.e., the project root or a dedicated plugins checkout):
+Run this once per machine, pointing at the cloned repo root:
 
 ```bash
 claude plugin marketplace add /path/to/tdd-and-pbt-javaland-2026
 ```
 
-This registers the project root as a local marketplace named after its directory.
+This registers a marketplace named `tdd-pbt-marketplace`.
 
-### Step 2 — Install the plugin from the local marketplace
+### Step 2 — Install the plugin
 
 ```bash
-claude plugin install tdd-pbt@tdd-and-pbt-javaland-2026
+claude plugin install tdd-pbt@tdd-pbt-marketplace
 ```
 
 If the marketplace was registered under a different name (check with `claude plugin marketplace list`), substitute that name after the `@`.
