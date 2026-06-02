@@ -102,7 +102,73 @@ Red phase complete. Should I proceed to Green phase?
 ## Remember
 
 - **One property at a time** — strict discipline
-- **Predict the counterexample** — build understanding of what jqwik will find
+- **Predict the counterexample** — build understanding of what the PBT framework will find
 - **Shrinking reveals boundaries** — the minimal failing input is informative
 - **No implementation** — only create empty class/method with default return
 - **Stop after Red** — wait for explicit approval
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **PBT framework**: jqwik 1.9.3
+- **Assertion library**: AssertJ
+- **Run command**: `mvn test`
+- **Properties file**: `src/test/java/<package>/<ClassName>Properties.java`
+- **Activate a property**: Remove `@Disabled("todo")`, write full property body with `@ForAll` parameters and assertions
+- **Empty stub**:
+  ```java
+  class Calculator {
+      int add(int a, int b) {
+          return 0; // default return
+      }
+  }
+  ```
+- **Activation example**:
+  ```java
+  // Before:
+  @Property
+  @Disabled("todo")
+  void additionIsCommutative(@ForAll int a, @ForAll int b) {}
+
+  // After:
+  @Property
+  void additionIsCommutative(@ForAll int a, @ForAll int b) {
+      assertThat(calculator.add(a, b)).isEqualTo(calculator.add(b, a));
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **PBT framework**: fast-check
+- **Assertion library**: Vitest `expect`
+- **Run command**: `npx vitest run`
+- **Properties file**: `src/<ClassName>.properties.test.ts`
+- **Activate a property**: Replace `test.todo(...)` with a full `it('...', () => { fc.assert(fc.property(...)) })` body
+- **Empty stub**:
+  ```typescript
+  export function add(a: number, b: number): number {
+      return 0; // default return
+  }
+  ```
+- **Activation example**:
+  ```typescript
+  // Before:
+  test.todo('addition is commutative: add(a, b) = add(b, a)');
+
+  // After:
+  it('addition is commutative: add(a, b) = add(b, a)', () => {
+      fc.assert(
+          fc.property(fc.integer(), fc.integer(), (a, b) => {
+              expect(add(a, b)).toBe(add(b, a));
+          })
+      );
+  });
+  ```
+
+Key equivalences:
+- `@Property @Disabled("todo")` (Java) → `test.todo(...)` (TypeScript)
+- `mvn test` (Java) → `npx vitest run` (TypeScript)
+- jqwik counterexample output (Java) → fast-check counterexample output (TypeScript)
+- `@ForAll int a` (Java) → `fc.integer()` (TypeScript)
+- Shrinking: both jqwik and fast-check shrink counterexamples to minimal failing inputs

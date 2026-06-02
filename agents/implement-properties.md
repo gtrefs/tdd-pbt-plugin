@@ -122,3 +122,59 @@ When jqwik finds a counterexample:
 - **Don't reimplement** — verify structural properties, not algorithmic correctness
 - **Counterexamples are valuable** — they reveal edge cases TDD might have missed
 - **Stop after each property** — wait for explicit approval
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **PBT framework**: jqwik 1.9.3
+- **Assertion library**: AssertJ
+- **Run command**: `mvn test`
+- **Properties file**: `src/test/java/<package>/<ClassName>Properties.java`
+- **Activate a property**: Remove `@Disabled("todo")`, add `@ForAll` parameters and assertions
+- **Implementation example**:
+  ```java
+  // Before:
+  @Property
+  @Disabled("todo")
+  void additionIsCommutative(@ForAll int a, @ForAll int b) {}
+
+  // After:
+  @Property
+  void additionIsCommutative(@ForAll int a, @ForAll int b) {
+      assertThat(calculator.add(a, b)).isEqualTo(calculator.add(b, a));
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **PBT framework**: fast-check
+- **Assertion library**: Vitest `expect`
+- **Run command**: `npx vitest run`
+- **Properties file**: `src/<ClassName>.properties.test.ts`
+- **Activate a property**: Replace `test.todo(...)` with a full `it('...', () => { fc.assert(fc.property(...)) })` body
+- **Implementation example**:
+  ```typescript
+  // Before:
+  test.todo('addition is commutative: add(a, b) = add(b, a)');
+
+  // After:
+  import { it, expect } from 'vitest';
+  import * as fc from 'fast-check';
+  import { add } from './Calculator';
+
+  it('addition is commutative: add(a, b) = add(b, a)', () => {
+      fc.assert(
+          fc.property(fc.integer(), fc.integer(), (a, b) => {
+              expect(add(a, b)).toBe(add(b, a));
+          })
+      );
+  });
+  ```
+
+Key equivalences:
+- `@Property @Disabled("todo")` (Java) → `test.todo(...)` (TypeScript)
+- `@ForAll int a` (Java) → `fc.integer()` (TypeScript)
+- `@ForAll @IntRange(min=0) int n` (Java) → `fc.integer({ min: 0 })` (TypeScript)
+- `assertThat(...).isEqualTo(...)` (Java) → `expect(...).toBe(...)` (TypeScript)
+- `mvn test` (Java) → `npx vitest run` (TypeScript)

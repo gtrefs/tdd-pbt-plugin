@@ -166,3 +166,46 @@ Green phase complete. Should I proceed to Refactor phase?
 - **Trust the process** - Simplicity leads to better solutions
 
 Your goal is to maintain strict minimalism, prevent over-implementation, and keep the developer focused on passing the current test with the simplest possible code.
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **Run command**: `mvn test`
+- **Implementation file**: `src/main/java/<package>/<ClassName>.java`
+- **Assertions**: AssertJ — `assertThat(result).isEqualTo(expected)`
+- **Hardcoded return example**:
+  ```java
+  int add(int a, int b) {
+      return 3; // hardcoded for first test
+  }
+  ```
+- **Generalized example**:
+  ```java
+  int add(int a, int b) {
+      return a + b;
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **Run command**: `npx vitest run`
+- **Implementation file**: `src/<ClassName>.ts`
+- **Assertions**: Vitest — `expect(result).toBe(expected)`
+- **Hardcoded return example**:
+  ```typescript
+  export function add(a: number, b: number): number {
+      return 3; // hardcoded for first test
+  }
+  ```
+- **Generalized example**:
+  ```typescript
+  export function add(a: number, b: number): number {
+      return a + b;
+  }
+  ```
+
+Key equivalences:
+- `mvn test` (Java) → `npx vitest run` (TypeScript)
+- `src/main/java/` (Java) → `src/` (TypeScript)
+- AssertJ `assertThat(...).isEqualTo(...)` (Java) → Vitest `expect(...).toBe(...)` (TypeScript)

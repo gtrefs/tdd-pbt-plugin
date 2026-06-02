@@ -154,3 +154,55 @@ Property List Created:
 - **Simple to complex** — ordering matters for incremental development
 - **`@Disabled("todo")` for all** — no executable properties yet
 - **Meaningful constraints** — use `@IntRange`, `@StringLength`, etc.
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **PBT framework**: jqwik 1.9.3
+- **Assertion library**: AssertJ
+- **Run command**: `mvn test`
+- **Properties file**: `src/test/java/<package>/<ClassName>Properties.java`
+- **Placeholder**: `@Property @Disabled("todo")` with `@ForAll` parameters
+- **Template**:
+  ```java
+  import net.jqwik.api.*;
+  import net.jqwik.api.constraints.*;
+  import static org.assertj.core.api.Assertions.assertThat;
+
+  class CalculatorProperties {
+
+      @Property
+      @Disabled("todo")
+      void simplestInvariant(@ForAll int a) {}
+
+      @Property
+      @Disabled("todo")
+      void relationalProperty(@ForAll int a, @ForAll int b) {}
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **PBT framework**: fast-check
+- **Assertion library**: Vitest `expect`
+- **Run command**: `npx vitest run`
+- **Properties file**: `src/<ClassName>.properties.test.ts`
+- **Placeholder**: `test.todo('property description')` for each property
+- **Template**:
+  ```typescript
+  import { test } from 'vitest';
+  import * as fc from 'fast-check';
+
+  // Properties ordered simple to complex:
+  test.todo('simplest invariant for any input');
+  test.todo('relational property comparing two inputs');
+  test.todo('more complex combined property');
+  ```
+
+Key equivalences:
+- `@Property @Disabled("todo") void name(@ForAll int a)` (Java) → `test.todo('name')` (TypeScript)
+- `@ForAll int a` → `fc.integer()`
+- `@ForAll @IntRange(min=0, max=100) int n` → `fc.integer({ min: 0, max: 100 })`
+- `@ForAll String s` → `fc.string()`
+- Properties file naming: `*Properties.java` (Java) → `*.properties.test.ts` (TypeScript)

@@ -177,3 +177,67 @@ Red phase complete. Should I proceed to Green phase?
 - **Trust the process** - Discomfort indicates correct discipline
 
 Your goal is to maintain strict TDD discipline, ensure predictions are made and verified, and keep the developer in control through human-in-the-loop checkpoints.
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **Placeholder to activate**: Remove `@Disabled("todo")` from exactly one `@Test` method
+- **Run command**: `mvn test`
+- **Two-stage failure**:
+  1. Compilation error: "cannot find symbol: class <ClassName>"
+  2. Runtime assertion error: "expected: <X> but was: <Y>"
+- **Empty stub**:
+  ```java
+  class Calculator {
+      int add(int a, int b) {
+          return 0; // default return
+      }
+  }
+  ```
+- **Test activation example**:
+  ```java
+  // Before:
+  @Test
+  @Disabled("todo")
+  void should_returnSumOfTwoPositiveNumbers() {}
+
+  // After:
+  @Test
+  void should_returnSumOfTwoPositiveNumbers() {
+      assertThat(new Calculator().add(1, 2)).isEqualTo(3);
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **Placeholder to activate**: Replace `test.todo('description')` with a full `test('description', () => { ... })` body
+- **Run command**: `npx vitest run`
+- **Two-stage failure**:
+  1. Import/type error: module not found or type mismatch
+  2. Assertion error: "expected <X> to be <Y>"
+- **Empty stub**:
+  ```typescript
+  export function add(a: number, b: number): number {
+      return 0; // default return
+  }
+  ```
+- **Test activation example**:
+  ```typescript
+  // Before:
+  test.todo('should return sum of two positive numbers');
+
+  // After:
+  import { expect, test } from 'vitest';
+  import { add } from './Calculator';
+
+  test('should return sum of two positive numbers', () => {
+      expect(add(1, 2)).toBe(3);
+  });
+  ```
+
+Key equivalences:
+- `@Disabled("todo")` (Java) → `test.todo(...)` (TypeScript)
+- `mvn test` (Java) → `npx vitest run` (TypeScript)
+- AssertJ `assertThat(...).isEqualTo(...)` (Java) → Vitest `expect(...).toBe(...)` (TypeScript)
+- Compilation error (Java) → Import/module-not-found error (TypeScript)

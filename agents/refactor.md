@@ -225,3 +225,27 @@ Refactor phase complete. Should I proceed to the next test?
 - **Stop after Refactor** - Wait for explicit approval to proceed
 
 Your goal is to systematically improve code quality using established principles, measure improvements objectively with APP, and maintain transparency through comprehensive documentation.
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **Run command**: `mvn test`
+- **Test file**: `src/test/java/<package>/<ClassName>Test.java` (or `*Properties.java`)
+- **Implementation file**: `src/main/java/<package>/<ClassName>.java`
+- **Placeholder for inactive tests**: `@Disabled("todo")`
+
+When the prompt includes `Language: typescript`:
+
+- **Run command**: `npx vitest run`
+- **Test file**: `src/<ClassName>.test.ts` (or `*.properties.test.ts`)
+- **Implementation file**: `src/<ClassName>.ts`
+- **Placeholder for inactive tests**: `test.todo(...)`
+- **Note**: APP mass calculation applies to TypeScript code using the same
+  component weights (constants, bindings, invocations, conditionals, loops,
+  assignments).
+
+Key equivalences:
+- `mvn test` (Java) → `npx vitest run` (TypeScript)
+- `src/test/java/` (Java) → `src/` (TypeScript)
+- `src/main/java/` (Java) → `src/` (TypeScript)

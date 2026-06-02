@@ -130,3 +130,56 @@ Should I proceed to implement these properties with /implement-properties?
 - **Meaningful properties** — each should catch a real class of bugs
 - **Appropriate constraints** — use `@IntRange`, `@StringLength`, etc.
 - **Stop after finding** — wait for approval before implementing
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **PBT framework**: jqwik 1.9.3
+- **Assertion library**: AssertJ
+- **Run command**: `mvn test`
+- **Properties file**: `src/test/java/<package>/<ClassName>Properties.java`
+- **Placeholder**: `@Property @Disabled("todo")` on each property method
+- **Generator parameters**: `@ForAll` with constraints (`@IntRange`, `@StringLength`, etc.)
+- **Template**:
+  ```java
+  import net.jqwik.api.*;
+  import net.jqwik.api.constraints.*;
+  import static org.assertj.core.api.Assertions.assertThat;
+
+  class CalculatorProperties {
+
+      @Property
+      @Disabled("todo")
+      void additionIsCommutative(@ForAll int a, @ForAll int b) {}
+
+      @Property
+      @Disabled("todo")
+      void additionWithZeroIsIdentity(@ForAll int a) {}
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **PBT framework**: fast-check
+- **Assertion library**: Vitest `expect`
+- **Run command**: `npx vitest run`
+- **Properties file**: `src/<ClassName>.properties.test.ts`
+- **Placeholder**: `test.todo('property description')` for each property
+- **Generator parameters**: `fc.integer()`, `fc.string()`, `fc.array(...)`, etc.
+- **Template**:
+  ```typescript
+  import { test } from 'vitest';
+  import * as fc from 'fast-check';
+
+  test.todo('addition is commutative: add(a, b) = add(b, a)');
+  test.todo('addition with zero is identity: add(a, 0) = a');
+  test.todo('addition is associative: add(add(a, b), c) = add(a, add(b, c))');
+  ```
+
+Key equivalences:
+- `@Property @Disabled("todo")` (Java) → `test.todo(...)` (TypeScript)
+- `@ForAll int a` (Java) → `fc.integer()` (TypeScript)
+- `@ForAll @IntRange(min=0) int a` (Java) → `fc.integer({ min: 0 })` (TypeScript)
+- `@ForAll String s` (Java) → `fc.string()` (TypeScript)
+- `assertThat(...).isEqualTo(...)` (Java) → `expect(...).toBe(...)` (TypeScript)

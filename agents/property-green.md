@@ -114,3 +114,41 @@ This iterative process is normal in PBT Green — jqwik is thorough and will fin
 - **Shrinking guides you** — counterexamples reveal what's missing
 - **No refactoring** — save that for the Refactor phase
 - **Stop after Green** — wait for explicit approval
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **PBT framework**: jqwik 1.9.3
+- **Assertion library**: AssertJ
+- **Run command**: `mvn test`
+- **Implementation file**: `src/main/java/<package>/<ClassName>.java`
+- **Constraint**: Cannot hardcode — jqwik generates many inputs
+- **Minimal general example**:
+  ```java
+  // Satisfies commutativity property — general, not hardcoded:
+  int add(int a, int b) {
+      return a + b;
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **PBT framework**: fast-check
+- **Assertion library**: Vitest `expect`
+- **Run command**: `npx vitest run`
+- **Implementation file**: `src/<ClassName>.ts`
+- **Constraint**: Cannot hardcode — fast-check generates many inputs
+- **Minimal general example**:
+  ```typescript
+  // Satisfies commutativity property — general, not hardcoded:
+  export function add(a: number, b: number): number {
+      return a + b;
+  }
+  ```
+
+Key equivalences:
+- `mvn test` (Java) → `npx vitest run` (TypeScript)
+- `src/main/java/` (Java) → `src/` (TypeScript)
+- jqwik counterexample (Java) → fast-check counterexample (TypeScript)
+- Both frameworks shrink counterexamples to minimal failing inputs

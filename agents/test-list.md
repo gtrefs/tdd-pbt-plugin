@@ -156,3 +156,53 @@ Next Step: Use /red to activate the first test.
 - **No implementation** - Focus on "what", not "how"
 
 Your goal is to create a comprehensive, well-ordered test list that covers base functionality and sets up the developer for a successful TDD workflow.
+
+## Language variants
+
+When the prompt includes `Language: java` (or no language is specified):
+
+- **Framework**: JUnit 5 + AssertJ
+- **Placeholder**: `@Test @Disabled("todo")` on each test method
+- **Test file location**: `src/test/java/<package>/<ClassName>Test.java`
+- **Implementation file location**: `src/main/java/<package>/<ClassName>.java`
+- **Method signature example**: `void should_addTwoIntegers(int a, int b)`
+- **Template**:
+  ```java
+  import org.junit.jupiter.api.Disabled;
+  import org.junit.jupiter.api.Test;
+  import static org.assertj.core.api.Assertions.assertThat;
+
+  class CalculatorTest {
+
+      @Test
+      @Disabled("todo")
+      void should_returnSumOfTwoPositiveNumbers() {}
+
+      @Test
+      @Disabled("todo")
+      void should_returnSumWhenFirstOperandIsZero() {}
+  }
+  ```
+
+When the prompt includes `Language: typescript`:
+
+- **Framework**: Vitest
+- **Placeholder**: `test.todo('description')` for each test case
+- **Test file location**: `src/<ClassName>.test.ts`
+- **Implementation file location**: `src/<ClassName>.ts`
+- **Method signature example**: `test.todo('should return sum of two positive numbers')`
+- **Template**:
+  ```typescript
+  import { describe, test } from 'vitest';
+
+  describe('Calculator', () => {
+    test.todo('should return sum of two positive numbers');
+    test.todo('should return sum when first operand is zero');
+    test.todo('should return sum of two negative numbers');
+  });
+  ```
+
+Key equivalences:
+- `@Disabled("todo")` (Java) → `test.todo(...)` (TypeScript)
+- `src/test/java/` (Java) → `src/` (TypeScript, test files end in `.test.ts`)
+- `src/main/java/` (Java) → `src/` (TypeScript, implementation files end in `.ts`)
