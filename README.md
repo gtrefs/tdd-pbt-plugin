@@ -1,12 +1,29 @@
 # tdd-pbt — Claude Code Plugin
 
-A reusable Claude Code plugin packaging TDD and Property-Based Testing workflow agents, rules, and skills.
+A reusable Claude Code plugin packaging TDD and Property-Based Testing workflow agents, rules, and skills. Supports **Java (jqwik 1.9.3)** and **TypeScript (fast-check + Vitest)** as parallel language tracks.
 
 ## What is included
 
-- **Agents**: Specialized sub-agents for each phase of the TDD and PBT cycles (red, green, refactor, test-list, property-list, find-properties, implement-properties, property-red, property-green)
-- **Rules**: Enforcement rules for Red-Green-Refactor discipline, jqwik PBT conventions, human-in-the-loop checkpoints, and Java/JUnit 6 setup
+- **Agents**: Specialized sub-agents for each phase of the TDD and PBT cycles (red, green, refactor, test-list, property-list, find-properties, implement-properties, property-red, property-green) — with Java and TypeScript variants
+- **Rules**: Enforcement rules for Red-Green-Refactor discipline, PBT conventions, and human-in-the-loop checkpoints
 - **Skills**: `/test-list`, `/red`, `/green`, `/refactor`, `/find-properties`, `/implement-properties`, `/property-list`, `/property-red`, `/property-green`, `/tutorial`
+
+## Language support
+
+On first use, any skill asks which language track to use and writes a `.tdd-pbt/config.yml` to your project:
+
+```yaml
+language: java        # or typescript
+```
+
+| | Java | TypeScript |
+|---|---|---|
+| PBT library | jqwik 1.9.3 | fast-check |
+| Test runner | Maven / JUnit 5 | Vitest |
+| Placeholder | `@Disabled("todo")` | `test.todo(...)` |
+| Test files | `src/test/java/` | `src/` |
+
+The tutorial (`/tdd-pbt:tutorial`) also offers language selection at the start but does not persist the config — it is session-scoped only.
 
 ## Installing the plugin (local / offline)
 
@@ -42,7 +59,7 @@ claude plugin install tdd-pbt@tdd-and-pbt-javaland-2026 --scope project
 claude plugin list
 ```
 
-The output should include `tdd-pbt` with version `0.1.0`.
+The output should include `tdd-pbt` with version `0.2.0`.
 
 ### Step 4 — Restart Claude Code
 
