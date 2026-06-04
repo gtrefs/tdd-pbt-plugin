@@ -1,0 +1,13 @@
+{
+  "name": "tdd-pbt-marketplace",
+  "owner": {
+    "name": "local marketplace for tdd-pbt-plugin"
+  },
+  "plugins": [
+    {
+      "name": "tdd-pbt-plugin",
+      "source": "./",
+      "description": "Adds tdd and pbt agents, rules, and skills."
+    }
+  ]
+}

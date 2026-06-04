@@ -17,7 +17,7 @@ The project root contains a `.claude-plugin/marketplace.json` that registers it 
 Run this once per machine, pointing at the cloned repo root:
 
 ```bash
-claude plugin marketplace add /path/to/tdd-and-pbt-javaland-2026
+claude plugin marketplace add /path/to/tdd-pbt-plugin
 ```
 
 This registers a marketplace named `tdd-pbt-marketplace`.
@@ -33,7 +33,7 @@ If the marketplace was registered under a different name (check with `claude plu
 To install for a single project only (project scope):
 
 ```bash
-claude plugin install tdd-pbt@tdd-and-pbt-javaland-2026 --scope project
+claude plugin install tdd-pbt@tdd-pbt-marketplace --scope project
 ```
 
 ### Step 3 — Verify installation
@@ -50,13 +50,15 @@ After installation, restart the Claude Code session (close and reopen the termin
 
 ## Updating the plugin
 
-After pulling new changes from the repo:
+After installation, pulling new changes from the repo by running:
 
 ```bash
 claude plugin update tdd-pbt
 ```
 
 ## Uninstalling
+
+To uninstall the plugin:
 
 ```bash
 claude plugin uninstall tdd-pbt
@@ -67,21 +69,21 @@ claude plugin uninstall tdd-pbt
 For the plugin to be discoverable, the directory registered as a marketplace must contain a subdirectory named `tdd-pbt-plugin/` with a valid `.claude-plugin/plugin.json` manifest. The current layout is:
 
 ```
-tdd-and-pbt-javaland-2026/        <- register this as the marketplace root
-└── tdd-pbt-plugin/               <- the plugin itself
-    ├── .claude-plugin/
-    │   └── plugin.json           <- machine-readable manifest (required)
-    ├── PLUGIN.md                 <- human-readable manifest
-    ├── agents/                   <- agent definitions
-    ├── rules/                    <- rule files
-    ├── skills/                   <- skill definitions
-    └── README.md                 <- this file
+tdd-pbt-plugin/                 <- the plugin itself, also registered as the marketplace root
+  ├── .claude-plugin/
+  │   ├── marketplace.json      <- marketplace definition (required)
+  │   └── plugin.json           <- machine-readable manifest (required)
+  ├── PLUGIN.md                 <- human-readable manifest
+  ├── agents/                   <- agent definitions
+  ├── rules/                    <- rule files
+  ├── skills/                   <- skill definitions
+  └── README.md                 <- this file
 ```
 
 ## Validating the manifest
 
 ```bash
-claude plugin validate /path/to/tdd-and-pbt-javaland-2026/tdd-pbt-plugin
+claude plugin validate /path/to/tdd-pbt-plugin
 ```
 
 ## Troubleshooting
