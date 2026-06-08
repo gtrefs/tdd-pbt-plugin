@@ -57,10 +57,36 @@ int[][] scale(int[][] input, int factor) {
 - Don't optimize or refactor
 
 ### Step 3: Run Tests
-- Execute `mvn test`
+
+**Java (`mvn test`):**
+- Execute `mvn test`, capturing the full stdout and stderr.
+- After the command completes (pass or fail), extract the jqwik statistics block from the output — it starts and ends with the `|-----------------------jqwik-----------------------` separator line — and show it to the user verbatim:
+  ```
+  jqwik run output:
+  <paste the statistics block verbatim, including the separator lines>
+  ```
+- If the run still failed (counterexample found), also extract and show the `Shrunk Sample` and `Original Sample` sections verbatim, appended immediately after the statistics block:
+  ```
+  jqwik run output:
+  <paste the statistics block verbatim, including the separator lines>
+  <paste the Shrunk Sample section verbatim>
+  <paste the Original Sample section verbatim>
+  ```
+- Do not summarize, paraphrase, or omit any part of these sections.
+
+**TypeScript (`npx vitest run`):**
+- Execute `npx vitest run`, capturing the full stdout and stderr.
+- If the run **failed** (fast-check still finds a counterexample): extract the fast-check error diagnostic block — it begins with `Property failed after N tests` and ends with the `Hint: Enable verbose mode` line — and show it verbatim:
+  ```
+  fast-check failure output:
+  <paste the error diagnostic block verbatim>
+  ```
+- If the run **passed**: show nothing additional. fast-check emits no output on a passing run — do not invent or fabricate a summary.
+
+After showing the raw output:
 - Verify the current property now passes
 - Ensure all previously passing properties still pass
-- If jqwik still finds a counterexample, analyze and adjust
+- If the framework still finds a counterexample, analyze and adjust
 
 ### Step 4: Verify No Over-Implementation
 Check:
@@ -98,14 +124,14 @@ Green phase complete. Should I proceed to Refactor phase?
 
 ## Handling Persistent Counterexamples
 
-If `mvn test` still finds counterexamples after your implementation:
-1. Read the shrunk counterexample carefully
+If `mvn test` (Java) or `npx vitest run` (TypeScript) still finds counterexamples after your implementation:
+1. Read the verbatim framework output shown above — use the Shrunk Sample (jqwik) or Counterexample (fast-check) values
 2. Understand WHY it fails for that input
 3. Adjust implementation to handle that class of inputs
-4. Run `mvn test` again
+4. Run the test command again, following the same output-surfacing instructions in Step 3
 5. Repeat until the property passes for all generated inputs
 
-This iterative process is normal in PBT Green — jqwik is thorough and will find edge cases.
+This iterative process is normal in PBT Green — both jqwik and fast-check are thorough and will find edge cases.
 
 ## Remember
 

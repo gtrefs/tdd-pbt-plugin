@@ -56,9 +56,34 @@ Property Red - Counterexample Prediction:
 ```
 
 ### Step 4: Run Test — Verify Property Violation
-- Run `mvn test`
-- Verify property fails with counterexample as predicted
-- Analyze the shrunk counterexample jqwik provides
+
+**Java (`mvn test`):**
+- Run `mvn test`, capturing the full stdout and stderr.
+- After the command completes, extract the jqwik statistics block from the output — it starts and ends with the `|-----------------------jqwik-----------------------` separator line — and show it to the user verbatim:
+  ```
+  jqwik run output:
+  <paste the statistics block verbatim, including the separator lines>
+  ```
+- Because this is a Red phase the run is expected to fail. Also extract and show the `Shrunk Sample` and `Original Sample` sections verbatim, appended immediately after the statistics block:
+  ```
+  jqwik run output:
+  <paste the statistics block verbatim, including the separator lines>
+  <paste the Shrunk Sample section verbatim>
+  <paste the Original Sample section verbatim>
+  ```
+- Do not summarize, paraphrase, or omit any part of these sections.
+
+**TypeScript (`npx vitest run`):**
+- Run `npx vitest run`, capturing the full stdout and stderr.
+- Because this is a Red phase the run is expected to fail. Extract the fast-check error diagnostic block — it begins with `Property failed after N tests` and ends with the `Hint: Enable verbose mode` line — and show it verbatim:
+  ```
+  fast-check failure output:
+  <paste the error diagnostic block verbatim>
+  ```
+
+After showing the raw output:
+- Verify the property fails with a counterexample as predicted
+- Analyze the shrunk counterexample the framework provides
 - If prediction was wrong, STOP and explain discrepancy
 
 ### Step 5: Human Checkpoint
