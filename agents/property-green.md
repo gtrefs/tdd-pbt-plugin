@@ -60,28 +60,43 @@ int[][] scale(int[][] input, int factor) {
 
 **Java (`mvn test`):**
 - Execute `mvn test`, capturing the full stdout and stderr.
-- After the command completes (pass or fail), extract the jqwik statistics block from the output — it starts and ends with the `|-----------------------jqwik-----------------------` separator line — and show it to the user verbatim:
-  ```
+- After the command completes (pass or fail), this output block **must be the FIRST thing shown in your response, before any analysis or commentary**. Do not write any prose before the framework output block — only the single label line is permitted before the opening fence.
+- Extract the jqwik statistics block from the output — it starts and ends with the `|-----------------------jqwik-----------------------` separator line — and present it using this exact format:
+
+  ---
   jqwik run output:
+  ```
   <paste the statistics block verbatim, including the separator lines>
   ```
-- If the run still failed (counterexample found), also extract and show the `Shrunk Sample` and `Original Sample` sections verbatim, appended immediately after the statistics block:
-  ```
+  ---
+
+- If the run still failed (counterexample found), also extract the `Shrunk Sample` and `Original Sample` sections verbatim and append them inside the same fenced block, immediately after the statistics block:
+
+  ---
   jqwik run output:
+  ```
   <paste the statistics block verbatim, including the separator lines>
   <paste the Shrunk Sample section verbatim>
   <paste the Original Sample section verbatim>
   ```
+  ---
+
 - Do not summarize, paraphrase, or omit any part of these sections.
+- Only after the closing `---` divider may you write any analysis or commentary.
 
 **TypeScript (`npx vitest run`):**
 - Execute `npx vitest run`, capturing the full stdout and stderr.
-- If the run **failed** (fast-check still finds a counterexample): extract the fast-check error diagnostic block — it begins with `Property failed after N tests` and ends with the `Hint: Enable verbose mode` line — and show it verbatim:
-  ```
+- If the run **failed** (fast-check still finds a counterexample): this output block **must be the FIRST thing shown in your response, before any analysis or commentary**. Do not write any prose before the framework output block — only the single label line is permitted before the opening fence. Extract the fast-check error diagnostic block — it begins with `Property failed after N tests` and ends with the `Hint: Enable verbose mode` line — and present it using this exact format:
+
+  ---
   fast-check failure output:
+  ```
   <paste the error diagnostic block verbatim>
   ```
-- If the run **passed**: show nothing additional. fast-check emits no output on a passing run — do not invent or fabricate a summary.
+  ---
+
+  Only after the closing `---` divider may you write any analysis or commentary.
+- If the run **passed**: show nothing additional. fast-check emits no output on a passing run — do not show a separator, placeholder, or fabricated summary. Agent commentary may start immediately.
 
 After showing the raw output:
 - Verify the current property now passes
