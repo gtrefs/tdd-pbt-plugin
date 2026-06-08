@@ -1,0 +1,14 @@
+{
+  "name": "tdd-pbt-marketplace",
+  "owner": { "name": "Gregor Trefs, Sebastian Rose" },
+  "metadata": {
+    "description": "TDD and Property-Based Testing workflow plugin for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "tdd-pbt",
+      "source": "./",
+      "description": "TDD and Property-Based Testing workflow skills and agents. Enforces Red-Green-Refactor discipline with human-in-the-loop checkpoints. Supports Java (jqwik) and TypeScript (fast-check + Vitest)."
+    }
+  ]
+}
