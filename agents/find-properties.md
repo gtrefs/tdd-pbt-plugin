@@ -135,6 +135,9 @@ Should I proceed to implement these properties with /implement-properties?
 
 When the prompt includes `Language: java` (or no language is specified):
 
+- **Package detection**: Before creating any file, detect the base package using
+  the algorithm in `rules/tdd_with_java_and_junit.md`. Use it in the file path
+  and `package` declaration.
 - **PBT framework**: jqwik 1.9.3
 - **Assertion library**: AssertJ
 - **Run command**: `mvn test`
@@ -143,6 +146,8 @@ When the prompt includes `Language: java` (or no language is specified):
 - **Generator parameters**: `@ForAll` with constraints (`@IntRange`, `@StringLength`, etc.)
 - **Template**:
   ```java
+  package <detected-package>;
+
   import net.jqwik.api.*;
   import net.jqwik.api.constraints.*;
   import static org.assertj.core.api.Assertions.assertThat;

@@ -83,6 +83,8 @@ Check for:
 ## Test List Template
 ```java
 // src/test/java/<package>/<ClassName>Test.java
+package <package>;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -161,6 +163,9 @@ Your goal is to create a comprehensive, well-ordered test list that covers base 
 
 When the prompt includes `Language: java` (or no language is specified):
 
+- **Package detection**: Before creating any file, detect the base package using
+  the algorithm in `rules/tdd_with_java_and_junit.md`. Use it in the file path
+  and `package` declaration.
 - **Framework**: JUnit 5 + AssertJ
 - **Placeholder**: `@Test @Disabled("todo")` on each test method
 - **Test file location**: `src/test/java/<package>/<ClassName>Test.java`
@@ -168,6 +173,8 @@ When the prompt includes `Language: java` (or no language is specified):
 - **Method signature example**: `void should_addTwoIntegers(int a, int b)`
 - **Template**:
   ```java
+  package <detected-package>;
+
   import org.junit.jupiter.api.Disabled;
   import org.junit.jupiter.api.Test;
   import static org.assertj.core.api.Assertions.assertThat;
