@@ -873,7 +873,7 @@ Implement property: next test.todo property
 ```
 
 After the agent completes and reports the result, inspect the agent result for a framework output block:
-- If the agent result contains a `---`-delimited block (jqwik statistics block or fast-check failure diagnostic), extract it and display it verbatim now — before any tutorial text. The block is already formatted correctly (fenced code block wrapped in `---` dividers); reproduce it as-is.
+- If the agent result contains a `---`-delimited block (jqwik statistics block or fast-check failure diagnostic), extract it and display it verbatim now — before any tutorial text. The block is already formatted correctly (fenced code block wrapped in `---` dividers); reproduce it as-is. **Do not alter the block content in any way before forwarding — do not rephrase, summarize, or selectively quote any lines from the fenced section.**
 - If no such block is present (e.g., passing fast-check run), skip this step entirely — show nothing.
 Only after this step (or immediately if no block) proceed to print the phase summary below.
 
@@ -1156,7 +1156,7 @@ Implementation file: src/Calculator.ts
 ```
 
 After the agent completes and reports Red phase complete, inspect the agent result for a framework output block:
-- If the agent result contains a `---`-delimited block (jqwik statistics block or fast-check failure diagnostic), extract it and display it verbatim now — before any tutorial text. The block is already formatted correctly (fenced code block wrapped in `---` dividers); reproduce it as-is.
+- If the agent result contains a `---`-delimited block (jqwik statistics block or fast-check failure diagnostic), extract it and display it verbatim now — before any tutorial text. The block is already formatted correctly (fenced code block wrapped in `---` dividers); reproduce it as-is. **Do not alter the block content in any way before forwarding — do not rephrase, summarize, or selectively quote any lines from the fenced section.**
 - If no such block is present (e.g., passing fast-check run), skip this step entirely — show nothing.
 Only after this step (or immediately if no block) proceed to print the phase summary below.
 
@@ -1268,7 +1268,7 @@ Implementation file: src/Calculator.ts
 ```
 
 After the agent completes and reports Green phase complete, inspect the agent result for a framework output block:
-- If the agent result contains a `---`-delimited block (jqwik statistics block or fast-check failure diagnostic), extract it and display it verbatim now — before any tutorial text. The block is already formatted correctly (fenced code block wrapped in `---` dividers); reproduce it as-is.
+- If the agent result contains a `---`-delimited block (jqwik statistics block or fast-check failure diagnostic), extract it and display it verbatim now — before any tutorial text. The block is already formatted correctly (fenced code block wrapped in `---` dividers); reproduce it as-is. **Do not alter the block content in any way before forwarding — do not rephrase, summarize, or selectively quote any lines from the fenced section.**
 - If no such block is present (e.g., passing fast-check run), skip this step entirely — show nothing.
 Only after this step (or immediately if no block) proceed to print the phase summary below.
 

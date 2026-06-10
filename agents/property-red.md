@@ -57,35 +57,59 @@ Property Red - Counterexample Prediction:
 
 ### Step 4: Run Test — Verify Property Violation
 
+> **Compile-error carve-out:** the verbatim-first constraint in this step applies only when
+> the framework actually ran and produced output. If `mvn test` or `npx vitest run` exits
+> with a compilation error before jqwik / fast-check executes any property, no statistics
+> block exists and the ordering constraint does not apply.
+
 **Java (`mvn test`):**
 - Run `mvn test`, capturing the full stdout and stderr.
-- After the command completes, this output block **must be the FIRST thing shown in your response, before any analysis or commentary**. Do not write any prose before the framework output block — only the single label line is permitted before the opening fence.
-- Extract the jqwik statistics block from the output — it starts and ends with the `|-----------------------jqwik-----------------------` separator line. Because this is a Red phase the run is expected to fail; also extract the `Shrunk Sample` and `Original Sample` sections verbatim. Present all of it using this exact format:
+- After the command completes (and the framework ran — see carve-out above), the framework
+  output block **must be the FIRST thing shown in your response**. You must not write any
+  prose — not even a single sentence — until after the closing `---` divider. Only the
+  single label line `jqwik run output:` is permitted before the opening fence.
+- Extract the jqwik statistics block from the output. The block starts and ends with the
+  exact delimiter line `|-----------------------jqwik-----------------------`. Because
+  this is a Red phase the run is expected to fail; also extract the `Shrunk Sample` and
+  `Original Sample` sections verbatim. Present all of it using this exact format:
 
   ---
   jqwik run output:
   ```
-  <paste the statistics block verbatim, including the separator lines>
+  <paste the statistics block verbatim, including both |-----------------------jqwik-----------------------  separator lines>
   <paste the Shrunk Sample section verbatim>
   <paste the Original Sample section verbatim>
   ```
   ---
 
-- Do not summarize, paraphrase, or omit any part of these sections.
+- **DO NOT paraphrase.** Do not restate counterexample values, shrink step counts, or
+  any other data from these sections in your own words — before or after the block.
+  Do not summarize or omit any part of these sections. Paste the raw lines exactly as
+  they appear in the command output.
 - Only after the closing `---` divider may you write any analysis or commentary.
 
 **TypeScript (`npx vitest run`):**
 - Run `npx vitest run`, capturing the full stdout and stderr.
-- Because this is a Red phase the run is expected to fail. This output block **must be the FIRST thing shown in your response, before any analysis or commentary**. Do not write any prose before the framework output block — only the single label line is permitted before the opening fence. Extract the fast-check error diagnostic block — it begins with `Property failed after N tests` and ends with the `Hint: Enable verbose mode` line — and present it using this exact format:
+- Because this is a Red phase the run is expected to fail (see carve-out above for the
+  compilation-error exception). The framework output block **must be the FIRST thing
+  shown in your response**. You must not write any prose — not even a single sentence —
+  until after the closing `---` divider. Only the single label line
+  `fast-check failure output:` is permitted before the opening fence.
+- Extract the fast-check failure diagnostic block. The block begins with the exact line
+  `Property failed after N tests` (where N is the actual number from the run) and ends
+  with the `Hint: Enable verbose mode` line. Present it using this exact format:
 
   ---
   fast-check failure output:
   ```
-  <paste the error diagnostic block verbatim>
+  <paste the error diagnostic block verbatim, from "Property failed after N tests" through "Hint: Enable verbose mode">
   ```
   ---
 
-  Only after the closing `---` divider may you write any analysis or commentary.
+- **DO NOT paraphrase.** Do not restate counterexample values, shrink step counts, or
+  any other data from the diagnostic in your own words — before or after the block.
+  Paste the raw lines exactly as they appear in the command output.
+- Only after the closing `---` divider may you write any analysis or commentary.
 
 After showing the raw output:
 - Verify the property fails with a counterexample as predicted

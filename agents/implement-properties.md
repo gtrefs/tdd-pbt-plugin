@@ -52,45 +52,70 @@ void resultSizeMatchesInput(@ForAll @IntRange(min = 1, max = 10) int n) {
 
 ### Step 3: Run Tests
 
+> **Compile-error carve-out:** the verbatim-first constraint in this step applies only when
+> the framework actually ran and produced output. If `mvn test` or `npx vitest run` exits
+> with a compilation error before jqwik / fast-check executes any property, no statistics
+> block exists and the ordering constraint does not apply.
+
 **Java (`mvn test`):**
 - Execute `mvn test`, capturing the full stdout and stderr of the command.
-- After the command completes (pass or fail), this output block **must be the FIRST thing shown in your response, before any analysis or commentary**. Do not write any prose before the framework output block — only the single label line is permitted before the opening fence.
-- Extract the jqwik statistics block from the output — it starts and ends with the `|-----------------------jqwik-----------------------` separator line — and present it using this exact format:
+- After the command completes (pass or fail, and the framework ran — see carve-out above),
+  the framework output block **must be the FIRST thing shown in your response**. You must
+  not write any prose — not even a single sentence — until after the closing `---` divider.
+  Only the single label line `jqwik run output:` is permitted before the opening fence.
+- Extract the jqwik statistics block from the output. The block starts and ends with the
+  exact delimiter line `|-----------------------jqwik-----------------------`. Present it
+  using this exact format:
 
   ---
   jqwik run output:
   ```
-  <paste the statistics block verbatim, including the separator lines>
+  <paste the statistics block verbatim, including both |-----------------------jqwik-----------------------  separator lines>
   ```
   ---
 
-- If the run failed, also extract the `Shrunk Sample` and `Original Sample` sections verbatim and append them inside the same fenced block, immediately after the statistics block:
+- If the run failed, also extract the `Shrunk Sample` and `Original Sample` sections
+  verbatim and append them inside the same fenced block, immediately after the statistics
+  block:
 
   ---
   jqwik run output:
   ```
-  <paste the statistics block verbatim, including the separator lines>
+  <paste the statistics block verbatim, including both |-----------------------jqwik-----------------------  separator lines>
   <paste the Shrunk Sample section verbatim>
   <paste the Original Sample section verbatim>
   ```
   ---
 
-- Do not summarize, paraphrase, or omit any part of these sections.
+- **DO NOT paraphrase.** Do not restate counterexample values, shrink step counts, or
+  any other data from these sections in your own words — before or after the block.
+  Do not summarize or omit any part of these sections. Paste the raw lines exactly as
+  they appear in the command output.
 - Note: under Maven the statistics block appears in stdout (possibly at `--info` log level). Capture all stdout and stderr so no output is missed.
 - Only after the closing `---` divider may you write any analysis or commentary.
 
 **TypeScript (`npx vitest run`):**
 - Execute `npx vitest run`, capturing the full stdout and stderr.
-- If the run **failed**: this output block **must be the FIRST thing shown in your response, before any analysis or commentary**. Do not write any prose before the framework output block — only the single label line is permitted before the opening fence. Extract the fast-check error diagnostic block — it begins with `Property failed after N tests` and ends with the `Hint: Enable verbose mode` line — and present it using this exact format:
+- If the run **failed** (fast-check finds a counterexample, and the framework ran — see
+  carve-out above): the framework output block **must be the FIRST thing shown in your
+  response**. You must not write any prose — not even a single sentence — until after the
+  closing `---` divider. Only the single label line `fast-check failure output:` is
+  permitted before the opening fence.
+- Extract the fast-check failure diagnostic block. The block begins with the exact line
+  `Property failed after N tests` (where N is the actual number from the run) and ends
+  with the `Hint: Enable verbose mode` line. Present it using this exact format:
 
   ---
   fast-check failure output:
   ```
-  <paste the error diagnostic block verbatim>
+  <paste the error diagnostic block verbatim, from "Property failed after N tests" through "Hint: Enable verbose mode">
   ```
   ---
 
-  Only after the closing `---` divider may you write any analysis or commentary.
+- **DO NOT paraphrase.** Do not restate counterexample values, shrink step counts, or
+  any other data from the diagnostic in your own words — before or after the block.
+  Paste the raw lines exactly as they appear in the command output.
+- Only after the closing `---` divider may you write any analysis or commentary.
 - If the run **passed**: show nothing additional. fast-check emits no output on a passing run — do not show a separator, placeholder, or fabricated summary. Agent commentary may start immediately.
 
 ### Step 4: Analyze Result
