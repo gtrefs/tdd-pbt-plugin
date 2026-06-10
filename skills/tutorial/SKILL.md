@@ -13,8 +13,11 @@ checkpoint. The goal is muscle memory, not reading.
 
 - The toy problem is `Calculator.add(a, b)` returning `a + b`. It is
   entirely self-contained. Do not reference any kata description or external file.
-- Use whatever package the user chooses, or default to no package (the default
-  package) if the user does not specify.
+- For Java, detect the project's base package using the algorithm in
+  `rules/tdd_with_java_and_junit.md` immediately after the user selects Java.
+  Store it as `$JAVA_PACKAGE` (e.g. `com.example`) and `$JAVA_PACKAGE_PATH`
+  (dots replaced by slashes, e.g. `com/example`). Use these variables in every
+  file path and in every agent call prompt.
 - The tutorial creates files only inside the user's current project directory.
   Agree on a subdirectory if they want to keep things isolated (e.g.
   `src/test/java/tutorial/` and `src/main/java/tutorial/` for Java, or
@@ -56,9 +59,11 @@ Store the result in session variable `$TUTORIAL_LANGUAGE`:
 - "TypeScript + fast-check + Vitest" → `$TUTORIAL_LANGUAGE = typescript`
 
 If `$TUTORIAL_LANGUAGE = java`:
-- Test file: `src/test/java/CalculatorTest.java`
-- Implementation file: `src/main/java/Calculator.java`
-- Properties file: `src/test/java/CalculatorProperties.java`
+- Run package detection (see `rules/tdd_with_java_and_junit.md`) to set
+  `$JAVA_PACKAGE` and `$JAVA_PACKAGE_PATH`.
+- Test file: `src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java`
+- Implementation file: `src/main/java/$JAVA_PACKAGE_PATH/Calculator.java`
+- Properties file: `src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java`
 - Placeholder syntax: `@Disabled("todo")`
 - Run command: `mvn test`
 
@@ -192,8 +197,8 @@ If `$TUTORIAL_LANGUAGE = java`, call the `test-list` agent with:
 ```
 Language: java
 Feature: Calculator — add two integers
-Test file: src/test/java/CalculatorTest.java
-Implementation file: src/main/java/Calculator.java
+Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 Requirements:
   - add(int a, int b) returns the sum of a and b
   - No external dependencies — self-contained toy problem
@@ -252,7 +257,7 @@ Call `AskUserQuestion` with:
 ```
 
 On "Review the test list first": print the contents of the test file
-(`src/test/java/CalculatorTest.java` for Java, `src/Calculator.test.ts` for TypeScript)
+(`src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java` for Java, `src/Calculator.test.ts` for TypeScript)
 and then re-ask the same question.
 
 On "Start Red phase": continue to TDD Step 2.
@@ -294,10 +299,10 @@ The goal: a failing test that fails for the RIGHT reason.
 If `$TUTORIAL_LANGUAGE = java`, call the `red` agent with:
 ```
 Language: java
-Test file: src/test/java/CalculatorTest.java
+Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
 Activate test: next @Disabled test
 Current state: 0 tests passing
-Implementation file: src/main/java/Calculator.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 ```
 
 If `$TUTORIAL_LANGUAGE = typescript`, call the `red` agent with:
@@ -363,11 +368,11 @@ The agent will not add logic for future tests. Only what this one test demands.
 If `$TUTORIAL_LANGUAGE = java`, call the `green` agent with:
 ```
 Language: java
-Test file: src/test/java/CalculatorTest.java
+Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
 Failing test: (the test activated in Red phase)
 Expected: add(a, b) returns a + b
 Current error: (the error from Red phase)
-Implementation file: src/main/java/Calculator.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 ```
 
 If `$TUTORIAL_LANGUAGE = typescript`, call the `green` agent with:
@@ -432,8 +437,8 @@ even if the conclusion is "naming is already clear, no changes needed."
 If `$TUTORIAL_LANGUAGE = java`, call the `refactor` agent with:
 ```
 Language: java
-Test file: src/test/java/CalculatorTest.java
-Implementation file: src/main/java/Calculator.java
+Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 Passing tests: (current count from Green phase)
 Recent Green phase: Implemented Calculator.add(int a, int b) to return a + b
 
@@ -612,8 +617,8 @@ Run the full TDD cycle in abbreviated form:
    ```
    Language: java
    Feature: Calculator — add two integers
-   Test file: src/test/java/CalculatorTest.java
-   Implementation file: src/main/java/Calculator.java
+   Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
+   Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
    Requirements:
      - add(int a, int b) returns the sum of a and b
      - Produce only base functionality tests (2–3 tests maximum)
@@ -655,10 +660,10 @@ Run the full TDD cycle in abbreviated form:
    - Call the `red` agent:
      ```
      Language: java
-     Test file: src/test/java/CalculatorTest.java
+     Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
      Activate test: next @Disabled test
      Current state: 0 tests passing
-     Implementation file: src/main/java/Calculator.java
+     Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
      ```
    - After Red, call `AskUserQuestion` (header: "Red → Green"):
      ```json
@@ -667,11 +672,11 @@ Run the full TDD cycle in abbreviated form:
    - Call the `green` agent:
      ```
      Language: java
-     Test file: src/test/java/CalculatorTest.java
+     Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
      Failing test: (the test activated in Red phase)
      Expected: add(a, b) returns a + b
      Current error: (the error from Red phase)
-     Implementation file: src/main/java/Calculator.java
+     Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
      ```
    - After Green, call `AskUserQuestion` (header: "Green → Refactor"):
      ```json
@@ -680,8 +685,8 @@ Run the full TDD cycle in abbreviated form:
    - Call the `refactor` agent:
      ```
      Language: java
-     Test file: src/test/java/CalculatorTest.java
-     Implementation file: src/main/java/Calculator.java
+     Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
+     Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
      Passing tests: (current count)
      Recent Green phase: Implemented Calculator.add(int a, int b)
 
@@ -767,9 +772,9 @@ The agent systematically checks six property categories:
 If `$TUTORIAL_LANGUAGE = java`, call the `find-properties` agent with:
 ```
 Language: java
-Implementation file: src/main/java/Calculator.java
-TDD test file: src/test/java/CalculatorTest.java
-Properties file: src/test/java/CalculatorProperties.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
+TDD test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorTest.java
+Properties file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java
 ```
 
 If `$TUTORIAL_LANGUAGE = typescript`, call the `find-properties` agent with:
@@ -816,7 +821,7 @@ Call `AskUserQuestion` with:
 ```
 
 On "Review the property list first": print the contents of the properties file
-(`src/test/java/CalculatorProperties.java` for Java, `src/Calculator.properties.test.ts` for TypeScript)
+(`src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java` for Java, `src/Calculator.properties.test.ts` for TypeScript)
 and re-ask the checkpoint question.
 
 On "Implement the first property": continue to Safety Net Step 3.
@@ -854,8 +859,8 @@ case tells us exactly where the property breaks.
 If `$TUTORIAL_LANGUAGE = java`, call the `implement-properties` agent with:
 ```
 Language: java
-Properties file: src/test/java/CalculatorProperties.java
-Implementation file: src/main/java/Calculator.java
+Properties file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 Implement property: next @Disabled property
 ```
 
@@ -1043,8 +1048,8 @@ If `$TUTORIAL_LANGUAGE = java`, call the `property-list` agent with:
 ```
 Language: java
 Feature: Calculator — add two integers
-Properties file: src/test/java/CalculatorProperties.java
-Implementation file: src/main/java/Calculator.java
+Properties file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 ```
 
 If `$TUTORIAL_LANGUAGE = typescript`, call the `property-list` agent with:
@@ -1095,7 +1100,7 @@ Call `AskUserQuestion` with:
 ```
 
 On "Review the property list first": print the contents of the properties file
-(`src/test/java/CalculatorProperties.java` for Java, `src/Calculator.properties.test.ts` for TypeScript)
+(`src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java` for Java, `src/Calculator.properties.test.ts` for TypeScript)
 and re-ask the checkpoint question.
 
 On "Start Property Red phase": continue to PFD Step 2.
@@ -1135,10 +1140,10 @@ does not hold.
 If `$TUTORIAL_LANGUAGE = java`, call the `property-red` agent with:
 ```
 Language: java
-Properties file: src/test/java/CalculatorProperties.java
+Properties file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java
 Activate property: next @Disabled property
 Current state: 0 properties passing
-Implementation file: src/main/java/Calculator.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 ```
 
 If `$TUTORIAL_LANGUAGE = typescript`, call the `property-red` agent with:
@@ -1245,11 +1250,11 @@ as the current property demands — not as general as future properties.
 If `$TUTORIAL_LANGUAGE = java`, call the `property-green` agent with:
 ```
 Language: java
-Properties file: src/test/java/CalculatorProperties.java
+Properties file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java
 Failing property: (the property activated in Property Red phase)
 Property asserts: (description from Property Red phase)
 Counterexample: (shrunk input from Property Red phase)
-Implementation file: src/main/java/Calculator.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 ```
 
 If `$TUTORIAL_LANGUAGE = typescript`, call the `property-green` agent with:
@@ -1313,8 +1318,8 @@ Four Rules of Simple Design, and calculates APP mass before and after.
 If `$TUTORIAL_LANGUAGE = java`, call the `refactor` agent with:
 ```
 Language: java
-Test file: src/test/java/CalculatorProperties.java
-Implementation file: src/main/java/Calculator.java
+Test file: src/test/java/$JAVA_PACKAGE_PATH/CalculatorProperties.java
+Implementation file: src/main/java/$JAVA_PACKAGE_PATH/Calculator.java
 Passing tests: (current count from Property Green phase)
 Recent Green phase: Implemented Calculator.add(int a, int b) to satisfy (property name)
 

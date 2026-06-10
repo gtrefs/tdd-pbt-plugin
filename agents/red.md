@@ -182,6 +182,9 @@ Your goal is to maintain strict TDD discipline, ensure predictions are made and 
 
 When the prompt includes `Language: java` (or no language is specified):
 
+- **Package detection**: Before creating the empty stub, detect the base package
+  using the algorithm in `rules/tdd_with_java_and_junit.md`. Place the stub in
+  `src/main/java/<package-path>/` and include a `package` declaration.
 - **Placeholder to activate**: Remove `@Disabled("todo")` from exactly one `@Test` method
 - **Run command**: `mvn test`
 - **Two-stage failure**:
@@ -189,6 +192,8 @@ When the prompt includes `Language: java` (or no language is specified):
   2. Runtime assertion error: "expected: <X> but was: <Y>"
 - **Empty stub**:
   ```java
+  package <detected-package>;
+
   class Calculator {
       int add(int a, int b) {
           return 0; // default return

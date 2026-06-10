@@ -147,8 +147,13 @@ When the prompt includes `Language: java` (or no language is specified):
 - **Run command**: `mvn test`
 - **Properties file**: `src/test/java/<package>/<ClassName>Properties.java`
 - **Activate a property**: Remove `@Disabled("todo")`, write full property body with `@ForAll` parameters and assertions
+- **Package detection**: If the implementation file does not yet exist, detect
+  the base package using the algorithm in `rules/tdd_with_java_and_junit.md`
+  before creating the empty stub.
 - **Empty stub**:
   ```java
+  package <detected-package>;
+
   class Calculator {
       int add(int a, int b) {
           return 0; // default return
